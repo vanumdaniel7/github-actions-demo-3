@@ -1,0 +1,40 @@
+name: Lint, test and deploy
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: download code
+        uses: actions/checkout@v4
+      - name: Install nodeJS
+        uses: actions/setup-node@v3
+      - name: install dependencies
+        run: npm ci
+      - name: Check lint
+        run: npm run lint
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: download code
+        uses: actions/checkout@v4
+      - name: Install nodeJS
+        uses: actions/setup-node@v3
+      - name: install dependencies
+        run: npm ci
+      - name: Run Tests
+        run: npm run test
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: download code
+        uses: actions/checkout@v4
+      - name: Install nodeJS
+        uses: actions/setup-node@v3
+      - name: install dependencies
+        run: npm ci
+      - name: Build code
+        run: npm run build
+      - name: Output message
+        run: echo "Build finished"
